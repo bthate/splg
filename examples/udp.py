@@ -13,10 +13,10 @@ import threading
 import time
 
 
-from ..launch import launch
-from ..log    import debug
-from ..object import Object, fmt
-from ..run    import fleet
+from splg.launch import launch
+from splg.log    import debug
+from splg.object import Object, fmt
+from splg.run    import fleet
 
 
 def init():

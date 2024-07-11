@@ -1,7 +1,0 @@
-grep -R nixt splg
-grep -R "print(" splg bin/tinder
-grep -R __import__ splg bin/tinder
-grep -R importlib splg bin/tinder
-grep -R "import sys" splg bin/tinder
-#grep -R sys splg bin/tinder
-#grep -R "import os" splg bin/tinder

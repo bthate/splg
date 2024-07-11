@@ -22,8 +22,8 @@ sys.path.insert(0, os.getcwd())
 from splg.face import *
 
 
-from splg import mod
-from splg import usr
+from splg import modules
+from splg import user
 
 
 if os.path.exists("examples"):
@@ -32,7 +32,7 @@ else:
     examples = None
 
 
-mod.rss.DEBUG = True
+modules.rss.DEBUG = True
 
 
 LAP = 1
@@ -138,12 +138,11 @@ def main():
     "main"
     Logging.out = Errors.out = print
     Cfg.dis = Cfg.sets.dis
-    Cfg.mod = ",".join(modnames(mod, usr, examples))
+    Cfg.mod = ",".join(modnames(modules, user, examples))
     if "v" in Cfg.opts:
         dte = " ".join(time.ctime(time.time()).replace("  ", " ").split()[1:])
         print(f'{dte} {Cfg.name.upper()} {Cfg.opts.upper()} {Cfg.mod.upper()}'.replace("  ", " "))
-    scan(mod, Cfg.mod)
-    scan(usr, Cfg.mod)
+    scan(Cfg.mod, modules, user)
     nrs = Cfg.index or 1
     nrcommand = len(Commands.cmds) or 1
     clt = CLII()

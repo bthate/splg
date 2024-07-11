@@ -5,16 +5,11 @@
 "modules"
 
 
-from . import log, req, rst, tdo, tmr, udp
+from . import rst, udp
 
 
 def __dir__():
     return (
-        'fnd',
-        'log',
-        'req'
         'rst',
-        'tdo',
-        'tmr',
         'udp'
     )

@@ -8,8 +8,8 @@
 import getpass
 import os
 import pwd
-import readline
 import sys
+import readline
 import termios
 import time
 
@@ -150,6 +150,7 @@ def terminal():
 
 
 def wrapped():
+    "starting point"
     if "-d" in sys.argv:
         background()
     if "-c" in sys.argv:
@@ -159,4 +160,4 @@ def wrapped():
 
 
 if __name__ == "__main__":
-    wrappted()
+    wrapped()
