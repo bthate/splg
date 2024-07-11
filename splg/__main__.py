@@ -150,12 +150,15 @@ def terminal():
 
 
 def wrapped():
-    "starting point"
-    if len(sys.argv) >= 2:
-        if "-d" in sys.argv[1]:
-            background()
-        if "-c" in sys.argv[1]:
-            console(terminal)
+    "starting point."
+    if len(sys.argv) < 2:
+        return
+    elif "-d" in sys.argv[1]:
+        background()
+    elif "-h" in sys.argv[1]:
+        cmnd("hlp", print)
+    elif "-c" in sys.argv[1]:
+        console(terminal)
     else:
         wrap(basic)
 
