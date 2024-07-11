@@ -149,10 +149,14 @@ def terminal():
     forever()
 
 
-if __name__ == "__main__":
+def wrapped():
     if "-d" in sys.argv:
         background()
     if "-c" in sys.argv:
         console(terminal)
     else:
         wrap(basic)
+
+
+if __name__ == "__main__":
+    wrappted()
