@@ -27,6 +27,7 @@ classifiers = [
 [project.scripts]
 "splg" = "splg.__main__:wrapped"
 
+
 [project.urls]
 "home" = "https://pypi.org/project/splg"
 "bugs" = "https://github.com/bthate/splg/issues"

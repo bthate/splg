@@ -151,10 +151,11 @@ def terminal():
 
 def wrapped():
     "starting point"
-    if "-d" in sys.argv:
-        background()
-    if "-c" in sys.argv:
-        console(terminal)
+    if len(sys.argv) >= 2:
+        if "-d" in sys.argv[1]:
+            background()
+        if "-c" in sys.argv[1]:
+            console(terminal)
     else:
         wrap(basic)
 
