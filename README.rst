@@ -44,7 +44,7 @@ DESCRIPTION
     I wrote the prosecutor asking for an arrest of the king (make him
     stop), the prosecutor decided to call it a "no basis to proceed".
 
-    It requires a `basis to prosecute`` of the prosecutor
+    It requires a `basis to prosecute` of the prosecutor
     to get the king in his cell and his genocide, thereby, stopped.
 
 
