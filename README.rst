@@ -1,32 +1,36 @@
-NAME
+**NAME**
 
 ::
 
-    SPLG - Stop Poison Law Genocide. Elderly, Wicked, Criminals, Handicapped.
+    ``SPLG`` - Elderly, Wicked, Criminals, Handicapped
 
 
-SYNOPSIS
+**SYNOPSIS**
 
 ::
 
     splg  <cmd> [key=val] [key==val]
-    splg  [-c] [-v]
-
-    options are:
-
-    -c     start console
-    -v     use verbose
+    splgc 
+    splgd
 
 
-INSTALL
+**INSTALL**
 
 ::
 
     $ pipx install splg
     $ pipx ensurepath
 
+    <new terminal>
 
-DESCRIPTION
+    $ splg srv > splg.service
+    # mv *.service /etc/systemd/system/
+    # systemctl enable splg --now
+
+    joins #splg on localhost
+
+
+**DESCRIPTION**
 
 ::
 
@@ -48,7 +52,7 @@ DESCRIPTION
     to get the king in his cell and his genocide, thereby, stopped.
 
 
-USAGE
+**USAGE**
 
 ::
 
@@ -67,24 +71,17 @@ USAGE
     $ splg mod
     cmd,err,fnd,irc,log,mod,req,rss,tdo,thr
 
-    use -c to start a console
+    start a console
 
-    $ splg -c
-
-    use mod=<name1,name2> to load additional modules
-
-    $ splg -c mod=irc,rss
+    $ splgc
     >
 
-    use -v for verbose
+    start a daemon
 
-    $ splg -cv mod=irc
-    Jul 11 23:13:32 2024 SPLG CV MOD,CMD,ERR,THR,CMD,ERR,HLP,IRC,MOD,REQ,RSS,THR,UPT
+    $ splgd
+    $    
 
-    use the -i options to start service defined in one of the loaded modules
-
-
-COMMANDS
+**COMMANDS**
 
 ::
 
@@ -102,7 +99,7 @@ COMMANDS
     thr - show the running threads
 
 
-CONFIGURATION
+**CONFIGURATION**
 
 ::
 
@@ -127,52 +124,23 @@ CONFIGURATION
     $ splg rem <url>
     $ splg nme <url> <name>
 
-
-SYSTEMD
-
-::
-
-    save the following it in /etc/systemd/system/splg.service and
-    replace "<user>" with the user running pipx
-
-    [Unit]
-    Description=Stop Poison Law Genocide. Elderly, Wicked, Criminals, Handicapped.
-    Requires=network-online.target
-    After=network-online.target
-
-    [Service]
-    Type=simple
-    User=<user>
-    Group=<user>
-    WorkingDirectory=/home/<user>/.splg
-    ExecStart=/home/<user>/.local/pipx/venvs/splg/bin/splg -d
-    RemainAfterExit=yes
-
-    [Install]
-    WantedBy=default.target
-
-    then run this
-
-    $ mkdir ~/.splg
-    $ sudo systemctl enable splg --now
-
-    default channel/server is #splg on localhost
-
-FILES
+**FILES**
 
 ::
 
     ~/.splg
     ~/.local/bin/splg
+    ~/.local/bin/splgc
+    ~/.local/bin/splgd
     ~/.local/pipx/venvs/splg/
 
-AUTHOR
+**AUTHOR**
 
 ::
 
     Bart Thate <bthate@dds.nl>
 
-COPYRIGHT
+**COPYRIGHT**
 
 ::
 
