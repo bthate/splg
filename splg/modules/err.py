@@ -1,10 +1,10 @@
 # This file is placed in the Public Domain.
 
 
-"deferred exception handling"
+"show errors"
 
 
-from ..defer import Errors
+from ..errors import Errors
 
 
 def err(event):

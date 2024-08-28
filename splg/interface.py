@@ -1,32 +1,32 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0401,W0611,W0614,W0622
+# pylint: disable=W0401,W0611,W0622,W0614
 # ruff: noqa: F401,F403
 
 
 "interface"
 
 
-from . import cache, cli, cmds, defer, event, handle, main
-from . import log, parse, disk, repeat, launch, timer, utils
+from . import cache, client, cmds, decoder, encoder, errors, event, reactor
+from . import log, object, parse, persist, repeater, thread, timer, utils
 
 
-from .cache  import *
-from .cli    import *
-from .cmds   import *
-from .cfg    import *
-from .defer  import *
-from .disk   import *
-from .event  import *
-from .handle import *
-from .launch import *
-from .log    import *
-from .object import *
-from .parse  import *
-from .repeat import *
-from .term   import *
-from .timer  import *
-from .utils  import *
-from .main   import *
+from .cache    import *
+from .client   import *
+from .cmds     import *
+from .decoder  import *
+from .encoder  import *
+from .errors   import *
+from .event    import *
+from .log      import *
+from .main     import *
+from .object   import *
+from .parse    import *
+from .persist import *
+from .reactor  import *
+from .repeater import *
+from .thread   import *
+from .timer    import *
+from .utils    import *
 
 
 def __dir__():
@@ -34,7 +34,6 @@ def __dir__():
         'Broker',
         'CLI',
         'Commands',
-        'Config',
         'Console',
         'Default',
         'Errors',
@@ -43,22 +42,22 @@ def __dir__():
         'Logging',
         'Object',
         'Persist',
+        'Reactor',
         'Repeater',
         'SEP',
         'Thread',
         'Timer',
-        'cmnd',
+        'broker',
         'command',
         'daemon',
         'debug',
-        'enable',
         'errors',
         'event',
         'fetch',
         'find',
         'fns',
         'fntime',
-        'init',
+        'getmods',
         'laps',
         'last',
         'later',
@@ -66,6 +65,7 @@ def __dir__():
         'long',
         'modnames',
         'named',
+        'privileges',
         'read',
         'scan',
         'skel',

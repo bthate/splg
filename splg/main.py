@@ -5,23 +5,21 @@
 "main"
 
 
-from .cli   import CLI
-from .cmds  import command
-from .defer import Errors, later
-from .event import Event
-from .log   import Logging
-from .utils import skip, spl
-
-
-from .cmds import scan as scancmd
-from .disk import scan as scancls
+from .client  import Client, command
+from .cmds    import Commands
+from .errors  import Errors
+from .persist import Persist
+from .event   import Event
+from .log     import Logging
+from .thread  import launch
+from .utils   import skip, spl
 
 
 def cmnd(txt, outer):
     "do a command using the provided output function."
     if not txt:
         return None
-    cli = CLI(outer)
+    cli = Client(outer)
     evn = Event()
     evn.txt = txt
     command(cli, evn)
@@ -31,27 +29,24 @@ def cmnd(txt, outer):
 
 def enable(outer):
     "enable printing."
-    CLI.out = Errors.out = Logging.out = outer
+    Client.out = Errors.out = Logging.out = outer
 
 
 def init(modstr, *pkgs, disable=None):
     "scan modules for commands and classes"
-    mds = []
+    thrs = []
     for mod in spl(modstr):
         if disable and mod in spl(disable):
             continue
         for pkg in pkgs:
-            module = getattr(pkg, mod, None)
-            if not module:
+            modi = getattr(pkg, mod, None)
+            if not modi:
                 continue
-            if "init" not in dir(module):
+            if "init" not in dir(modi):
                 continue
-            try:
-                module.init()
-            except Exception as ex:
-                later(ex)
+            thrs.append(launch(modi.init))
             break
-    return mds
+    return thrs
 
 
 def scan(modstr, *pkgs, disable=""):
@@ -64,8 +59,8 @@ def scan(modstr, *pkgs, disable=""):
             module = getattr(pkg, modname, None)
             if not module:
                 continue
-            scancmd(module)
-            scancls(module)
+            Commands.scan(module)
+            Persist.scan(module)
     return mds
 
 

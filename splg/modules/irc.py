@@ -16,26 +16,20 @@ import time
 import _thread
 
 
-from ..cli    import CLI
-from ..cmds   import command
-from ..dft    import Default
-from ..defer  import later
-from ..event  import Event
-from ..handle import Handler
-from ..log    import Logging, debug
-from ..object import Object, edit, fmt, keys
-from ..disk   import last, sync
-from ..run    import fleet
-from ..launch import launch
-
-
-NAME    = __file__.split(os.sep)[-3]
-
-
-saylock = _thread.allocate_lock()
+from ..client  import Client, command
+from ..default import Default
+from ..errors  import later
+from ..fleet   import Fleet
+from ..event   import Event
+from ..log     import Logging, debug
+from ..object  import Object, edit, fmt, keys
+from ..persist import last, sync
+from ..thread  import launch
 
 
 Logging.filter = ["PING", "PONG", "PRIVMSG"]
+NAME           = __file__.split(os.sep)[-3]
+saylock        = _thread.allocate_lock()
 
 
 def init():
@@ -164,13 +158,12 @@ class Output:
         return 0
 
 
-class IRC(CLI, Handler, Output):
+class IRC(Client, Output):
 
     "IRC"
 
     def __init__(self):
-        CLI.__init__(self)
-        Handler.__init__(self)
+        Client.__init__(self)
         Output.__init__(self)
         self.buffer = []
         self.cfg = Config()
@@ -199,7 +192,7 @@ class IRC(CLI, Handler, Output):
         self.register('PRIVMSG', cb_privmsg)
         self.register('QUIT', cb_quit)
         self.register("366", cb_ready)
-        fleet.register(self)
+        Fleet.register(self)
 
     def announce(self, txt):
         "announce on all channels."
@@ -504,7 +497,7 @@ class IRC(CLI, Handler, Output):
         self.events.connected.clear()
         self.events.joined.clear()
         launch(Output.out, self)
-        launch(Handler.start, self)
+        launch(Client.start, self)
         launch(
                self.doconnect,
                self.cfg.server or "localhost",
@@ -520,7 +513,7 @@ class IRC(CLI, Handler, Output):
         self.disconnect()
         self.dostop.set()
         self.oput(None, None)
-        Handler.stop(self)
+        Client.stop(self)
 
     def wait(self):
         "wait for ready."
@@ -633,18 +626,18 @@ def mre(event):
     if not event.channel:
         event.reply('channel is not set.')
         return
-    bot = fleet.get(event.orig)
+    bot = Fleet.get(event.orig)
     if 'cache' not in dir(bot):
         event.reply('bot is missing cache')
         return
-    if event.channel not in bot.cache:
+    if event.channel not in Output.cache:
         event.reply(f'no output in {event.channel} cache.')
         return
     for _x in range(3):
-        txt = bot.gettxt(event.channel)
+        txt = Output.gettxt(event.channel)
         if txt:
-            bot.say(event.channel, txt)
-    size = bot.size(event.channel)
+            event.reply(txt)
+    size = IRC.size(event.channel)
     event.reply(f'{size} more in cache')
 
 

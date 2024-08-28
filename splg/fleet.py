@@ -1,10 +1,10 @@
 # This file is placed in the Public Domain.
 
 
-"list of bots."
+"list of bots"
 
 
-from .object import Object, values
+from .object import Object
 
 
 rpr = object.__repr__
@@ -14,23 +14,34 @@ class Fleet(Object):
 
     "Fleet"
 
-    def all(self):
-        "return all objects."
-        return values(self)
+    bots = []
 
-    def announce(self, txt):
+    @staticmethod
+    def all():
+        "return all objects."
+        return Fleet.bots
+
+    @staticmethod
+    def announce(txt):
         "announce on all bots."
-        for bot in values(self):
+        for bot in Fleet.bots:
             if "announce" in dir(bot):
                 bot.announce(txt)
 
-    def get(self, orig):
+    @staticmethod
+    def get(orig):
         "return bot."
-        return getattr(self, orig, None)
+        res = None
+        for bot in Fleet.bots:
+            if rpr(bot) == orig:
+                res = bot
+                break
+        return res
 
-    def register(self, obj):
+    @staticmethod
+    def register(obj):
         "add bot."
-        setattr(self, rpr(obj), obj)
+        Fleet.bots.append(obj)
 
 
 def __dir__():

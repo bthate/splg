@@ -2,7 +2,7 @@
 # pylint: disable=W0212,W0718
 
 
-"handler"
+"reactor"
 
 
 import queue
@@ -11,12 +11,12 @@ import _thread
 
 
 from .object import Object
-from .launch import launch
+from .thread import launch
 
 
-class Handler:
+class Reactor:
 
-    "Handler"
+    "Reactor"
 
     def __init__(self):
         self.cbs      = Object()
@@ -28,6 +28,9 @@ class Handler:
         evt.orig = repr(self)
         func = getattr(self.cbs, evt.type, None)
         if not func:
+            evt.ready()
+            return
+        if "target" in dir(func) and func.target not in str(func).lower():
             evt.ready()
             return
         evt._thr = launch(func, self, evt)
@@ -64,5 +67,5 @@ class Handler:
 
 def __dir__():
     return (
-        'Handler',
+        'Reactor',
     )

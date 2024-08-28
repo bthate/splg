@@ -8,11 +8,9 @@ import threading
 import time
 
 
-from ..object import Object, update
-from ..utils  import laps
-
-
-STARTTIME = time.time()
+from ..object  import Object, update
+from ..runtime import STARTTIME
+from ..utils   import laps
 
 
 def thr(event):
@@ -23,6 +21,8 @@ def thr(event):
             continue
         obj = Object()
         update(obj, vars(thread))
+        if getattr(obj, 'current', None):
+            thread.name = obj.current
         if getattr(obj, 'sleep', None):
             uptime = obj.sleep - int(time.time() - obj.state["latest"])
         elif getattr(obj, 'starttime', None):

@@ -1,6 +1,7 @@
 # This file is placed in the Public Domain.
 # pylint: disable=R0902
 
+
 "at a specific time"
 
 
@@ -9,7 +10,7 @@ import threading
 
 
 from .object import Object
-from .launch import launch
+from .thread import launch
 from .utils  import named
 
 

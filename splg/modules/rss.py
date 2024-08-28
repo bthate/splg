@@ -20,15 +20,15 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
 
 
-from ..dft    import Default
-from ..object import Object, construct, fmt, update
-from ..disk   import find, last, sync
-from ..ool    import OoL, ladd
-from ..repeat import Repeater
-from ..launch import launch
-from ..log    import debug
-from ..run    import fleet
-from ..utils  import fntime, laps, spl
+from ..default  import Default
+from ..fleet    import Fleet
+from ..object   import Object, construct, fmt, update
+from ..persist  import find, last, sync
+from ..group    import Group
+from ..repeater import Repeater
+from ..thread   import launch
+from ..log      import debug
+from ..utils    import fntime, laps, spl
 
 
 def init():
@@ -44,14 +44,13 @@ DEBUG = False
 
 TEMPLATE = """<opml version="1.0">
     <head>
-        <title>rssbot opml</title>
+        <title>OPML</title>
     </head>
     <body>
-        <outline title="rssbot opml" text="24/7 feed fetcher">"""
+        <outline title="opml" text="rss feeds">"""
 
 
-
-fetchlock = _thread.allocate_lock()
+fetchlock  = _thread.allocate_lock()
 
 
 class Feed(Default):
@@ -70,22 +69,9 @@ class Rss(Default):
         self.rss          = ''
 
 
-class Urls(OoL):
+class Urls(Group):
 
     "Seen"
-
-    def __init__(self):
-        OoL.__init__(self)
-        self.nrlinks = Object()
-
-def uadd(obj, url, item):
-    "urls add."
-    links = getattr(obj, url, None)
-    if links:
-        nrs = getattr(obj.nrlinks, url, None)
-        if nrs and len(links) > nrs:
-            links.pop(0)
-    ladd(obj, url, item)
 
 
 class Fetcher(Object):
@@ -122,8 +108,10 @@ class Fetcher(Object):
     def fetch(self, feed, silent=False):
         "fetch feed."
         with fetchlock:
-            counter = 0
             result = []
+            seen = getattr(self.seen, feed.rss, [])
+            urls = []
+            counter = 0
             for obj in reversed(getfeed(feed.rss, feed.display_list)):
                 counter += 1
                 fed = Feed()
@@ -134,15 +122,14 @@ class Fetcher(Object):
                     uurl = f'{url.scheme}://{url.netloc}/{url.path}'
                 else:
                     uurl = fed.link
-                if uurl in getattr(self.seen, feed.rss, []):
+                urls.append(uurl)
+                if uurl in seen:
                     continue
-                uadd(self.seen, feed.rss, uurl)
                 if self.dosave:
                     sync(fed)
                 result.append(fed)
-            if counter > getattr(self.seen.nrlinks, feed.rss, 0):
-                setattr(self.seen.nrlinks, feed.rss, counter)
-        self.seenfn = sync(self.seen, self.seenfn)
+            setattr(self.seen, feed.rss, urls)
+            self.seenfn = sync(self.seen, self.seenfn)
         if silent:
             return counter
         txt = ''
@@ -151,7 +138,7 @@ class Fetcher(Object):
             txt = f'[{feedname}] '
         for obj in result:
             txt2 = txt + self.display(obj)
-            fleet.announce(txt2.rstrip())
+            Fleet.announce(txt2.rstrip())
         return counter
 
     def run(self, silent=False):
@@ -392,6 +379,9 @@ def syn(event):
         thr.join()
         nrs += 1
     event.reply(f"{nrs} feeds synced")
+
+
+syn.threaded = True
 
 
 "OPML"

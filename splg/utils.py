@@ -5,10 +5,11 @@
 "utilities"
 
 
-import datetime
+import os
 import pathlib
+import pwd
 import time
-import types
+import types as rtypes
 import _thread
 
 
@@ -19,11 +20,6 @@ def cdir(pth):
     "create directory."
     path = pathlib.Path(pth)
     path.parent.mkdir(parents=True, exist_ok=True)
-
-
-def date():
-    "return time with date."
-    return str(datetime.datetime.now())
 
 
 def fntime(daystr):
@@ -47,11 +43,6 @@ def forever():
             time.sleep(1.0)
         except (KeyboardInterrupt, EOFError):
             _thread.interrupt_main()
-
-
-def hms():
-    "return hour:minutes:seconds string."
-    return now().split(".")[0]
 
 
 def laps(seconds, short=True):
@@ -104,7 +95,7 @@ def modnames(*args):
 
 def named(obj):
     "return a full qualified name of an object/function/module."
-    if isinstance(obj, types.ModuleType):
+    if isinstance(obj, rtypes.ModuleType):
         return obj.__name__
     typ = type(obj)
     if '__builtins__' in dir(typ):
@@ -120,9 +111,21 @@ def named(obj):
     return None
 
 
-def now():
-    "return string of the current time."
-    return date().split()[-1]
+def pidfile(pid):
+    "write the pid to a file."
+    if os.path.exists(pid):
+        os.unlink(pid)
+    path = pathlib.Path(pid)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(pid, "w", encoding="utf-8") as fds:
+        fds.write(str(os.getpid()))
+
+
+def privileges(username):
+    "drop privileges."
+    pwnam = pwd.getpwnam(username)
+    os.setgid(pwnam.pw_gid)
+    os.setuid(pwnam.pw_uid)
 
 
 def skip(name, skipp):
@@ -150,14 +153,13 @@ def strip(pth, nmr=3):
 def __dir__():
     return (
         'cdir',
-        'date',
         'fntime',
         'forever',
-        'hms',
         'laps',
         'modnames',
         'named',
-        'now',
+        'pidfile',
+        'privileges',
         'skip',
         'spl',
         'strip'

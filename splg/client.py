@@ -2,23 +2,24 @@
 # pylint: disable=W0125
 
 
-"command line interface"
+"client"
 
 
-from .cmds   import command
-from .handle import Handler
-from .object import Object
+from .cache   import Cache
+from .cmds    import Commands
+from .parse   import parse
+from .reactor import Reactor
 
 
-class CLI(Handler):
+class Client(Reactor):
 
-    "CLI"
+    "Client"
 
-    cache = Object()
+    cache = Cache()
     out = None
 
     def __init__(self, outer=None):
-        Handler.__init__(self)
+        Reactor.__init__(self)
         self.register("command", command)
         self.out = outer
 
@@ -38,7 +39,17 @@ class CLI(Handler):
             self.say(evt.channel, txt)
 
 
+def command(bot, evt):
+    "check for and run a command."
+    parse(evt)
+    func = getattr(Commands.cmds, evt.cmd, None)
+    if func:
+        func(evt)
+        bot.show(evt)
+    evt.ready()
+
+
 def __dir__():
     return (
-       'CLI',
+       'Client',
     )
