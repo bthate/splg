@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "splg"
 description = "Elderly, Handicapped, Criminals, Wicked"
-version = "4"
+version = "5"
 authors = [
     {name = "Bart Thate", email = "bthate@dds.nl"},
 ]
