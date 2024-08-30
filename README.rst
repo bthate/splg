@@ -1,7 +1,5 @@
 **NAME**
 
-::
-
     ``SPLG`` - Elderly, Handicapped, Criminals, Wicked
 
 
@@ -22,7 +20,6 @@
 
 **DESCRIPTION**
 
-::
 
     In 2018 i informed the king of the netherlands that what he calls
     medicine in his "care" laws are not medicine but poison. Proof of
@@ -44,14 +41,14 @@
 
 **USAGE**
 
-    ::
+::
 
-        $ python3 -m splg req
-        Information and Evidence Unit
-        Office of the Prosecutor
-        Post Office Box 19519
-        2500 CM The Hague
-        The Netherlands
+    $ python3 -m splg req
+    Information and Evidence Unit
+    Office of the Prosecutor
+    Post Office Box 19519
+    2500 CM The Hague
+    The Netherlands
 
 
 **FILES**
